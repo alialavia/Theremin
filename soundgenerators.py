@@ -25,7 +25,6 @@ class Osc(object):
     def __init__(self, frequency=220, waveformFunc=sin):
         self.frequency = frequency
         self.waveformFunc = waveformFunc
-
         self.__phase = 0
 
 
@@ -59,6 +58,7 @@ class FMOsc(Osc):
         signal = self.waveformFunc(tau * freqs * ts + self._Osc__phase)
         self._Osc__phase = (tau * freqs[-1] * tEnd + self._Osc__phase) % tau
         return signal
+
 
     @property
     def fmFrequency(self):
@@ -197,7 +197,7 @@ class Theremin(object):
         if 0.0 <= val <= 1.0:
             self._Theremin__volume = val
         else:
-            warnings.warn('No legit value for tremoloAmount')
+            warnings.warn('No legit value for volume')
 
 
     '''morph'''
@@ -210,4 +210,4 @@ class Theremin(object):
         if 0.0 <= val <= 1.0:
             self._Theremin__morph = val
         else:
-            warnings.warn('No legit value for tremoloAmount')
+            warnings.warn('No legit value for morph')

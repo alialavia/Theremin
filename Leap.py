@@ -5,9 +5,6 @@
 # the SWIG interface file instead.
 
 
-
-
-
 from sys import version_info
 if version_info >= (2,6,0):
     def swig_import_helper():

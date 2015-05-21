@@ -49,10 +49,8 @@ def initialize():
     handprocessor.run()
     return p, stream, theremin
 
-def virtualTheremin():
-    
+def virtualTheremin():  
     p, stream, theremin = initialize()
-
 
     try:
         # Main Loop

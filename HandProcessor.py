@@ -87,7 +87,8 @@ class HandState(object):
     def findHighestFinger(self):
         distances = []
         interaction_box = self.__hand__.frame.interaction_box
-        return interaction_box.normalize_point(self.__hand__.palm_position)
+        vector = interaction_box.normalize_point(self.__hand__.palm_position)
+        return vector.x, vector.y, vector.z
 
     """ Returns a value between 0 and 1, 0 being a closed and 1 being an open palm """
     def findPalmState(self):

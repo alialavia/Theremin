@@ -1,5 +1,4 @@
-import Leap;
-
+import Leap
 
 class HandProcessor:
     def __init__():

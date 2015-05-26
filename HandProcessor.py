@@ -1,4 +1,8 @@
 import Leap
+from numpy import pi
+from helpers import cutoff
+palm_offset = -60.0
+palm_gain = 2.0
 
 class LeapEventListener(Leap.Listener):
     def __init__(self):
@@ -26,14 +30,15 @@ class LeapEventListener(Leap.Listener):
                     if self.RightHandHandler != None:
                         self.RightHandHandler(hand)
 
+""" Dispatches left hand and right hand events """
 class HandProcessor(object):
     
     def __init__(self):
         self.listener = LeapEventListener() 
         self.controller = Leap.Controller()
-        #self.controller.set_policy(Leap.Controller.POLICY_BACKGROUND_FRAMES)
+        self.controller.set_policy(Leap.Controller.POLICY_BACKGROUND_FRAMES)
 
-    def run(self):       
+    def run(self): 
         self.controller.add_listener(self.listener)
 
     def attachLeftEventHandler(self, handler):
@@ -48,18 +53,15 @@ class HandState(object):
     
     def __init__(self, hand):
         self.__hand__ = hand        
-        self.PalmPosition = self.getPalmPosition()
+        self.PalmPosition = self.findHighestFinger()
         self.Pinch = self.findPinch()
+        self.PalmState = self.findPalmState()
 
     """ Get the hand object assigned to this object """
     def getHand(self):
         return self.__hand__
 
-    """ Get palm position """
-    def getPalmPosition(self):
-        return hand.frame.interaction_box.normalize_point(hand.palm_position)
-
-    """ Find the pinching finger. Returns 0 if no pinch is found """
+    """ Find the pinching finger. Returns -1 if no pinch is found """
     def findPinch(self):
         
         iterfingers = iter(self.__hand__.fingers)
@@ -82,7 +84,7 @@ class HandState(object):
         return distances.index(minDistance)
 
     """ Calculate distance of farthest finger tip"""
-    def maxDistance(self):
+    def findHighestFinger(self):
         distances = []
         interaction_box = self.__hand__.frame.interaction_box
 
@@ -92,3 +94,16 @@ class HandState(object):
                 distances += [interaction_box.normalize_point(fingerbone.next_joint).z]
 
         return max(distances)
+
+    """ Returns a value between 0 and 1, 0 being a closed and 1 being an open palm """
+    def findPalmState(self):
+        distance = 0
+        valid_fingers = 0
+
+        for finger in self.__hand__.fingers:
+            fingerbone = finger.bone(Leap.Bone.TYPE_DISTAL)                                        
+            if (fingerbone.is_valid):                        
+                distance += fingerbone.next_joint.distance_to(self.__hand__.palm_position)
+                valid_fingers += 1
+
+        return cutoff((distance / valid_fingers + palm_offset) * palm_gain, 0.0, 100.0) / 100.0

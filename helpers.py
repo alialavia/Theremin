@@ -1,11 +1,22 @@
-import sys
+import sys, os, inspect
 import struct
 from time import time
-from main import sampleWidth
-import Leap
+from settings import *
 
 _maxVal = 2 ** (sampleWidth * 8) / 2.1
 _notelist = ['C', 'C#', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'G#', 'A', 'Bb', 'B']
+
+def addLeapPath():
+    src_dir = os.path.dirname(inspect.getfile(inspect.currentframe()))
+    arch_dir = 'lib/x64' if sys.maxsize > 2**32 else 'lib/x86'
+    sys.path.insert(0, os.path.abspath(os.path.join(src_dir, arch_dir)))
+
+def cutoff(value, minCut, maxCut):
+    if value > maxCut:
+        return maxCut
+    if value < minCut:
+        return minCut
+    return value
 
 def convert(seq):
     '''Converts numpy float array ([-1.0, 1.0]) to binary data (little endian)'''

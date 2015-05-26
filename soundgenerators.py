@@ -3,8 +3,7 @@ import warnings
 import numpy as np
 tau = 2 * np.pi
 import scipy.signal
-from main import fs, chunkSize
-
+from settings import *
 
 '''Waveform Functions'''
 sin      = np.sin

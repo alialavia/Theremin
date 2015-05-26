@@ -57,3 +57,6 @@ scale_to_chroma     = _scaler(_chroma_map)
 scale_to_major      = _scaler(_major_map)
 scale_to_minor      = _scaler(_minor_map)
 scale_to_pentatonic = _scaler(_pentatonic_map)
+
+def no_scaling(f):
+    return f

@@ -11,8 +11,8 @@ import Leap, HandProcessor
 
 
 # Paramters
-fmin = 220. # [Hz]
-fmax = 440. # [Hz]
+fmin = 261.626 # [Hz]
+fmax = fmin * 2 # [Hz]
 
 # Init
 #global theremin
@@ -32,9 +32,9 @@ def printInfo(theremin):
 def lefthand(hand):
     handState = HandProcessor.HandState(hand)
     global theremin, scaling_func
-
     # Pinching
     p = handState.Pinch
+    print "Left  ", handState.Pinch, handState.PalmState
     if p != -1:
         if p == 0:
             scaling_func = musicscale.no_scaling
@@ -47,7 +47,7 @@ def lefthand(hand):
 
     # Open/Closed Hand
     a = handState.PalmState
-    theremin.tremoloAmount = a
+    theremin.tremoloAmount = 1 - a
 
     # Position -> Vol
     x, y, z = handState.PalmPosition
@@ -58,26 +58,21 @@ def lefthand(hand):
 def righthand(hand):
     handState = HandProcessor.HandState(hand)
     global theremin, scaling_func
+    print "Right ", handState.Pinch, handState.PalmState
 
     # Pinching
     p = handState.Pinch
     if p != -1:
-        if p == 0:
-            theremin.waveFormFunc1 = soundgenerators.sin
-        elif p == 1:
-            theremin.waveFormFunc1 = soundgenerators.triangle
-        elif p == 2:
-            theremin.waveFormFunc1 = soundgenerators.sawtooth
-        elif p == 3:
-            theremin.waveFormFunc1 = soundgenerators.square
+        theremin._Theremin__osc1.waveformFunc = [soundgenerators.sin, soundgenerators.triangle, 
+                                      soundgenerators.sawtooth, soundgenerators.square][p]
     
     # Open/Closed Hand
     a = handState.PalmState
-    theremin.vibratoAmount = a
+    theremin.vibratoAmount = (1 - a) * 10
     
     # Position -> freq
     x, y, z = handState.PalmPosition
-    freq = fmin + z * fmax
+    freq = fmin + (1.0-z) * fmax
     theremin.frequency = scaling_func(freq)
 
     

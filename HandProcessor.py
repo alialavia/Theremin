@@ -87,13 +87,7 @@ class HandState(object):
     def findHighestFinger(self):
         distances = []
         interaction_box = self.__hand__.frame.interaction_box
-
-        for finger in self.__hand__.fingers:
-            fingerbone = finger.bone(Leap.Bone.TYPE_DISTAL)                                        
-            if (fingerbone.is_valid):                        
-                distances += [interaction_box.normalize_point(fingerbone.next_joint).z]
-
-        return max(distances)
+        return interaction_box.normalize_point(self.__hand__.palm_position)
 
     """ Returns a value between 0 and 1, 0 being a closed and 1 being an open palm """
     def findPalmState(self):

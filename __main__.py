@@ -1,13 +1,13 @@
 '''Virtual Theremin'''
-import config
 import sys
+import config
 import pyaudio
 import soundgenerators
-import helpers
 import musicscale
+import helpers
 
 helpers.addLeapPath()
-import Leap, HandProcessor
+import Leap, leapprocessors
 
 
 # Init
@@ -24,7 +24,7 @@ def printInfo(theremin):
 def lefthand(hand):
     '''Handler for left hand'''
     global theremin, scaling_func
-    handState = HandProcessor.HandState(hand)
+    handState = leapprocessors.HandState(hand)
     print "Left  ", handState.Pinch, handState.PalmState
 
     # Pinching Gesture
@@ -47,7 +47,7 @@ def lefthand(hand):
 def righthand(hand):
     '''handler for right hand'''
     global theremin, scaling_func
-    handState = HandProcessor.HandState(hand)
+    handState = leapprocessors.HandState(hand)
     print "Right ", handState.Pinch, handState.PalmState
 
     # Pinching Gesture
@@ -82,13 +82,13 @@ def virtualTheremin():
 
         # Init Leap
         print "Initializing Leap"
-        handprocessor = HandProcessor.HandProcessor()
+        handProcessor = leapprocessors.HandProcessor()
         print "Done"
 
         # Attach handlers to left and right hand events
-        handprocessor.attachLeftEventHandler(lefthand)
-        handprocessor.attachRightEventHandler(righthand)
-        handprocessor.run()
+        handProcessor.attachLeftEventHandler(lefthand)
+        handProcessor.attachRightEventHandler(righthand)
+        handProcessor.run()
 
         # Main Loop
         while True:        

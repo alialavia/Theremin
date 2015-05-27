@@ -1,1 +1,4 @@
-This is the first file added by Alex.
+Dependencies:
+- NumPy
+- PortAudio (http://www.portaudio.com)
+- PyAudio

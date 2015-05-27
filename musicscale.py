@@ -1,5 +1,5 @@
 from numpy import log2, power
-a440 = 440.
+import config
 maxD = 128
 
 _chroma_map    = []
@@ -41,11 +41,11 @@ for i in range(maxD):
 
 
 def freq_2_midi(f):
-    return int(69 + 12 * log2(f / a440))
+    return int(69 + 12 * log2(f / config.a440))
 
 
 def midi_2_freq(d):
-    return power(2., (d - 69) / 12.) * a440
+    return power(2., (d - 69) / 12.) * config.a440
 
 
 def _scaler(mapping):

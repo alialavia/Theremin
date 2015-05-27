@@ -18,3 +18,6 @@ fmin = 261.626
 # Maximum frequency of Virtual Theremin [Hz]
 # fmax = 2 * fmin -> one octave
 fmax = 2 * fmin
+
+# Kammerton A440 [Hz]
+a440 = 440.

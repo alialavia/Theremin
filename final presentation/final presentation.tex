@@ -35,23 +35,40 @@
 \frame{
     \frametitle{Features}
     For each hand, we extracted the following:
-    \itemize{
+    \begin{itemize}
         \item Palm position ($x,y,z$)
         \item Pinch gesture ($p_0, p_1, p_2, p_3$)
         \item Open/closed hand ($\alpha\in\left[0\ldots1\right]$)
-    }
+    \end{itemize}
 }
 
 % N e w  F r a m e
 \frame{
     \frametitle{Pinch Gestures}
-    TODO: How it's done
-}
+    Two approaches
+    \itemize{
+        \item Grabbing the images from Leap Motion and classifying the gestures
+         \begin{itemize}
+                \item Template matching for tracking the hand
+                \item Linear SVM (Linear). Precision/recall only 70\%
+                \item Synthesizing gestures using Blender (Unfinished)
+        \end{itemize}
+
+
+        \item Leap Motion's SDK. Finger tip closest to the thumb and below a certain threshold. Precision/recall around 93\%
+    }
+
+    }
 
 % N e w  F r a m e
 \frame{
     \frametitle{Open / Closed Hand}
-    TODO: How it's done
+    Also via Leap SDK to detect level
+    \begin{itemize}
+        \item Average distance between fingers' tips and palm center    
+        \item No exact definition of open or closed hand, let alone a 50\%- or 79\%-open hand. Consequently, no way to measure the accuracy of any detection method        
+    \end{itemize}
+    But there is a reasonable correlation between $\alpha$ and how close or open the hand is.    
 }
 
 % N e w  F r a m e
@@ -62,7 +79,7 @@
 
     \itemize{
         \item \texttt{leftHand.y} $\to$ Amplitude/Volume
-        \item \texttt{rightHand.z} $\to$ frequency
+        \item \texttt{rightHand.z} $\to$ Frequency
     }
 
     \vspace{5mm}
@@ -75,12 +92,13 @@
 % N e w  F r a m e
 \frame{
     \frametitle{Findings}
-    \itemize{
+    \begin{itemize}
         \item Precision of Leap Sensor is limited. E.g. it's not possible to accurately play
             a vibrato.
         \item Linear frequency mapping is easier to play.
         \item Leap has difficulties with tracking fingers under the hand palm.
-    }
+        \item Users adapt.
+    \end{itemize}
 }
 
 % N e w  F r a m e

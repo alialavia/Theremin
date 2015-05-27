@@ -4,6 +4,7 @@ import config
 import pyaudio
 import soundgenerators
 import musicscale
+from helpers import freq_2_note
 import helpers
 
 helpers.addLeapPath()
@@ -17,9 +18,12 @@ theremin.volume = 0.4
 theremin.frequency = config.fmin
 scaling_func = musicscale.no_scaling
 
+
 def printInfo(theremin):
-    print helpers.freqency_to_note(theremin.frequency), " Freq = ", theremin.frequency, ", Volume =", theremin.volume
-    #print helpers.freqency_to_note(theremin.frequency)
+    freq = theremin.frequency
+    vol = theremin.volume
+    note = freq_2_note(freq)
+    print 'Note: {0}, frequency: {1} Hz, volume: {2}'.format(note, freq, vol)
 
 
 def lefthand(hand):
@@ -43,7 +47,7 @@ def lefthand(hand):
     # Position -> Vol
     __, y, __ = handState.PalmPosition
     theremin.volume = y
-    
+
 
 def righthand(hand):
     '''handler for right hand'''
@@ -55,22 +59,21 @@ def righthand(hand):
     p = handState.Pinch
     if p != -1:
         theremin._Theremin__osc1.waveformFunc = [soundgenerators.sin,
-                                                 soundgenerators.triangle, 
+                                                 soundgenerators.triangle,
                                                  soundgenerators.sawtooth,
                                                  soundgenerators.square][p]
 
     # Open/Closed Hand
     alpha = handState.PalmState
     theremin.vibratoAmount = (1. - alpha) * 10
-    
+
     # Position -> freq
     __, __, z = handState.PalmPosition
     freq = config.fmin + (1. - z) * config.fmax
     theremin.frequency = scaling_func(freq)
 
-    
 
-def virtualTheremin(): 
+def virtualTheremin():
     try:
         # Init PyAudio
         p = pyaudio.PyAudio()
@@ -92,7 +95,7 @@ def virtualTheremin():
         handProcessor.run()
 
         # Main Loop
-        while True:        
+        while True:
             signal = theremin.read()
             data = helpers.convert(signal)
             stream.write(data)
@@ -105,7 +108,7 @@ def virtualTheremin():
         raise
 
     finally:
-        # Cleanup
+        # Exit
         stream.stop_stream()
         stream.close()
         p.terminate()

@@ -1,7 +1,20 @@
-fs          = 44100    # Sampling Rate
-nChannels   = 1        # Number of Audio channels
-sampleWidth = 2        # Number of Bytes per sample
-chunkSize   = 256      # Chunk Size
-fmin        = 261.626  # Minimum frequency of Virtual Theremin [Hz]
-fmax        = 2 * fmin # Maximum frequency of Virtual Theremin [Hz].
-                       # 2 * fmin -> One Octave
+'''Configuration Paramters'''
+# Sampling Rate
+fs = 44100
+
+# Number of Audio channels
+nChannels = 1
+
+# Number of Bytes per sample
+sampleWidth = 2
+
+# Chunk Size
+chunkSize = 256
+
+# Minimum frequency of Virtual Theremin [Hz]
+# 261.626 Hz ~ C4/Middle C
+fmin = 261.626
+
+# Maximum frequency of Virtual Theremin [Hz]
+# fmax = 2 * fmin -> one octave
+fmax = 2 * fmin

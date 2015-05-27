@@ -3,7 +3,7 @@ import warnings
 import numpy as np
 tau = 2 * np.pi
 import scipy.signal
-from settings import *
+import config
 
 '''Waveform Functions'''
 sin      = np.sin
@@ -28,8 +28,8 @@ class Osc(object):
 
 
     def read(self):
-        tEnd = chunkSize / float(fs)
-        ts = np.arange(0, tEnd, 1. / fs)
+        tEnd = config.chunkSize / float(config.fs)
+        ts = np.arange(0, tEnd, 1. / config.fs)
         signal = self.waveformFunc(tau * self.frequency * ts + self.__phase)
         self.__phase = (tau * self.frequency * tEnd + self.__phase) % tau
         return signal
@@ -51,8 +51,8 @@ class FMOsc(Osc):
 
 
     def read(self):
-        tEnd = chunkSize / float(fs)
-        ts = np.arange(0, tEnd, 1. / fs)
+        tEnd = config.chunkSize / float(config.fs)
+        ts = np.arange(0, tEnd, 1. / config.fs)
         freqs = self.frequency + self.fmAmount * self.__lfo.read()
         signal = self.waveformFunc(tau * freqs * ts + self._Osc__phase)
         self._Osc__phase = (tau * freqs[-1] * tEnd + self._Osc__phase) % tau

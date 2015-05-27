@@ -7,7 +7,8 @@ import musicscale
 import helpers
 
 helpers.addLeapPath()
-import Leap, leapprocessors
+#import Leap, leapprocessors
+import leapprocessors
 
 
 # Init
@@ -86,8 +87,8 @@ def virtualTheremin():
         print "Done"
 
         # Attach handlers to left and right hand events
-        handProcessor.attachLeftEventHandler(lefthand)
-        handProcessor.attachRightEventHandler(righthand)
+        handProcessor.attach_left_event_handler(lefthand)
+        handProcessor.attach_right_event_handler(righthand)
         handProcessor.run()
 
         # Main Loop

@@ -1,8 +1,20 @@
 import sys, os, inspect
 import struct
+import numpy as np
 import config
 
+def freq_2_midi(f):
+    return int(69 + 12 * np.log2(f / config.a440))
+
+
+def midi_2_freq(d):
+    return np.power(2., (d - 69) / 12.) * config.a440
+
 _notelist = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
+
+def freq_2_note(f):
+    d = freq_2_midi(f)
+    return _notelist[d%12]
 
 def addLeapPath():
     src_dir = os.path.dirname(inspect.getfile(inspect.currentframe()))

@@ -1,4 +1,4 @@
-from numpy import log2, power
+from helpers import freq_2_midi, midi_2_freq
 import config
 maxD = 128
 
@@ -38,14 +38,6 @@ for i in range(maxD):
 
     else:
         _pentatonic_map.append(i)
-
-
-def freq_2_midi(f):
-    return int(69 + 12 * log2(f / config.a440))
-
-
-def midi_2_freq(d):
-    return power(2., (d - 69) / 12.) * config.a440
 
 
 def _scaler(mapping):

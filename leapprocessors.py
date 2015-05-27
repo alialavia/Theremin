@@ -59,9 +59,9 @@ class HandState(object):
 
     def __init__(self, hand):
         self._hand = hand
-        self.PalmPosition = self.find_highest_finger()
-        self.Pinch = self.find_pinch()
-        self.PalmState = self.find_palm_state()
+        self.palmPosition = self.find_highest_finger()
+        self.pinch = self.find_pinch()
+        self.palmState = self.find_palm_state()
 
     def get_hand(self):
         '''Get the hand object assigned to this HandState object.'''

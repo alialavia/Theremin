@@ -20,6 +20,7 @@ scaling_func = musicscale.no_scaling
 
 
 def printInfo(theremin):
+    '''Print Theremin state infos'''
     freq = theremin.frequency
     vol = theremin.volume
     note = freq_2_note(freq)
@@ -27,13 +28,18 @@ def printInfo(theremin):
 
 
 def lefthand(hand):
-    '''Handler for left hand'''
-    global theremin, scaling_func
+    '''Handler for left hand
+    
+    hand.pinch -> which musical scaling
+    hand.palmState -> tremolo intensity
+    y position -> volume
+    '''
+    global theremin, scaling_func # TODO: global could possibly be eliminated
     handState = leapprocessors.HandState(hand)
-    print "Left  ", handState.Pinch, handState.PalmState
+    print "Left : pinch=% d, palmState=%.2f" % (handState.pinch, handState.palmState)
 
     # Pinching Gesture
-    p = handState.Pinch
+    p = handState.pinch
     if p != -1:
         scaling_func = [musicscale.no_scaling,
                         musicscale.scale_to_chroma,
@@ -41,39 +47,44 @@ def lefthand(hand):
                         musicscale.scale_to_pentatonic][p]
 
     # Open/Closed Hand
-    alpha = handState.PalmState
+    alpha = handState.palmState
     theremin.tremoloAmount = 1. - alpha
 
     # Position -> Vol
-    __, y, __ = handState.PalmPosition
+    __, y, __ = handState.palmPosition
     theremin.volume = y
 
 
 def righthand(hand):
-    '''handler for right hand'''
-    global theremin, scaling_func
+    '''handler for right hand
+    
+    hand.pinch -> waveform
+    hand.palmState -> vibrato intensity
+    z position -> frequency
+    '''
+    global theremin, scaling_func # TODO: global could possibly be eliminated
     handState = leapprocessors.HandState(hand)
-    print "Right ", handState.Pinch, handState.PalmState
+    print "Right: pinch=% d, palmState=%.2f" % (handState.pinch, handState.palmState)
 
     # Pinching Gesture
-    p = handState.Pinch
+    p = handState.pinch
     if p != -1:
-        theremin._Theremin__osc1.waveformFunc = [soundgenerators.sin,
-                                                 soundgenerators.triangle,
-                                                 soundgenerators.sawtooth,
-                                                 soundgenerators.square][p]
+        theremin.waveform_func = [soundgenerators.sin,
+                                  soundgenerators.triangle,
+                                  soundgenerators.sawtooth,
+                                  soundgenerators.square][p]
 
     # Open/Closed Hand
-    alpha = handState.PalmState
+    alpha = handState.palmState
     theremin.vibratoAmount = (1. - alpha) * 10
 
     # Position -> freq
-    __, __, z = handState.PalmPosition
+    __, __, z = handState.palmPosition
     freq = config.fmin + (1. - z) * config.fmax
     theremin.frequency = scaling_func(freq)
 
 
-def virtualTheremin():
+def virtual_theremin():
     try:
         # Init PyAudio
         p = pyaudio.PyAudio()
@@ -118,4 +129,4 @@ def virtualTheremin():
 
 
 if __name__ == '__main__':
-    virtualTheremin()
+    virtual_theremin()

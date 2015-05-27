@@ -1,5 +1,4 @@
 import Leap
-from numpy import pi
 from helpers import cutoff
 palm_offset = -60.0
 palm_gain = 2.0

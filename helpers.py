@@ -4,7 +4,7 @@ import numpy as np
 import config
 
 def freq_2_midi(f):
-    return int(69 + 12 * np.log2(f / config.a440))
+    return int(round(69 + 12 * np.log2(f / float(config.a440))))
 
 
 def midi_2_freq(d):

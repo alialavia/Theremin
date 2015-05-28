@@ -4,10 +4,9 @@ import config
 import pyaudio
 import soundgenerators
 import musicscale
-from helpers import freq_2_note
-import helpers
+from helpers import freq_2_note, convert, add_leap_path
 
-helpers.add_leap_path()
+add_leap_path()
 #import Leap, leapprocessors
 import leapprocessors
 
@@ -19,7 +18,7 @@ theremin.frequency = config.fmin
 scaling_func = musicscale.no_scaling
 
 
-def printInfo(theremin):
+def print_info(theremin):
     '''Print Theremin state infos'''
     freq = theremin.frequency
     vol = theremin.volume
@@ -108,7 +107,7 @@ def virtual_theremin():
         # Main Loop
         while True:
             signal = theremin.read()
-            data = helpers.convert(signal)
+            data = convert(signal)
             stream.write(data)
 
     except (KeyboardInterrupt):

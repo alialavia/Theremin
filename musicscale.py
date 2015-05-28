@@ -1,5 +1,4 @@
 from helpers import freq_2_midi, midi_2_freq
-import config
 maxD = 128
 
 _chroma_map    = []

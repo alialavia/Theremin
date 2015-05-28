@@ -1,45 +1,35 @@
+'''Music scale
+
+Fit continous frequency into music scales.
+'''
 from helpers import freq_2_midi, midi_2_freq
-maxD = 128
 
-_chroma_map    = []
+# Scale Patterns
+_chroma_pattern = range(12)
+_major_pattern = [0, 2, 4, 5, 7, 9, 11]
+_minor_pattern = [0, 2, 3, 5, 7, 8, 10]
+_pentatonic_pattern = [0, 2, 4, 7, 9]
 
-_major_pattern = {1, 3, 6, 8, 10}
-_major_map     = []
+def _scale_builder(pattern, maxD=128):
+    n = len(pattern)
+    idx = n - 1
+    ret = []
+    for i in range(maxD):
+        if i % 12 in pattern:
+            idx = (idx + 1) % n
 
-_minor_pattern = {1, 4, 6, 9, 11}
-_minor_map     = []
+        ret.append(pattern[idx] + 12 * (i / 12))
+    return ret
 
-_pentatonic_pattern  = {1, 3, 5, 8, 10}
-_pentatonic_pattern2 = {6, 11}
-_pentatonic_map      = []
-
-
-for i in range(maxD):
-    _chroma_map.append(i)
-
-    if i % 12 in _major_pattern:
-        _major_map.append(i-1)
-
-    else:
-        _major_map.append(i)
-
-    if i % 12 in _minor_pattern:
-        _minor_map.append(i-1)
-
-    else:
-        _minor_map.append(i)
-
-    if i % 12 in _pentatonic_pattern:
-        _pentatonic_map.append(i-1)
-
-    elif i % 12 in _pentatonic_pattern2:
-        _pentatonic_map.append(i-2)
-
-    else:
-        _pentatonic_map.append(i)
+# Build Mapping
+_chroma_map = _scale_builder(_chroma_pattern)
+_major_map = _scale_builder(_major_pattern)
+_minor_map = _scale_builder(_minor_pattern)
+_pentatonic_map = _scale_builder(_pentatonic_pattern)
 
 
 def _scaler(mapping):
+    '''Returns function with mapping'''
     def inner(freq):
         d = freq_2_midi(freq)
         d_scaled = mapping[d]
@@ -47,9 +37,10 @@ def _scaler(mapping):
     return inner
 
 
-scale_to_chroma     = _scaler(_chroma_map)
-scale_to_major      = _scaler(_major_map)
-scale_to_minor      = _scaler(_minor_map)
+'''Scaling functions'''
+scale_to_chroma = _scaler(_chroma_map)
+scale_to_major = _scaler(_major_map)
+scale_to_minor = _scaler(_minor_map)
 scale_to_pentatonic = _scaler(_pentatonic_map)
 
 

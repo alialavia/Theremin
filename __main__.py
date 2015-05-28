@@ -7,7 +7,7 @@ import musicscale
 from helpers import freq_2_note
 import helpers
 
-helpers.addLeapPath()
+helpers.add_leap_path()
 #import Leap, leapprocessors
 import leapprocessors
 
